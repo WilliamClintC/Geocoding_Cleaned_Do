@@ -27,6 +27,9 @@
 
 This study utilizes a comprehensive truck stop directory dataset containing information about individual truck stops. Notably, the original dataset does not include geographic coordinates (latitude and longitude). The  objective of this project is to systematically extract and assign accurate geographic coordinates to each truck stop entry.
 
+This README provides an overview of the project. More details on the matching processes and the intermediate/raw files are available at: https://github.com/WilliamClintC/Geocoding_Documentation/blob/main/5.pdf
+
+
 ## Challenges
 
 A significant challenge encountered in this process stems from the inconsistent formatting of address information. While some entries provide complete street addresses, others list only road names, highway exits, or mile markers. This lack of standardization complicates the process of automated geocoding and necessitates additional data processing steps.
