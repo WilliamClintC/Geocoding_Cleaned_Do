@@ -27,7 +27,7 @@
 
 This study utilizes a comprehensive truck stop directory dataset containing information about individual truck stops. Notably, the original dataset does not include geographic coordinates (latitude and longitude). The  objective of this project is to systematically extract and assign accurate geographic coordinates to each truck stop entry.
 
-This README provides an overview of the project. More details on the matching processes and the intermediate/raw files are available at: https://github.com/WilliamClintC/Geocoding_Documentation/blob/main/5.pdf
+This README provides an overview of the project. More details on the matching processes and the intermediate/raw files are available at: https://github.com/WilliamClintC/Geocoding_Documentation/blob/main/6.pdf
 
 
 ## Challenges
@@ -126,10 +126,10 @@ These two websites share similar formatting but with slightly different availabi
 Yellow Pages was scraped to gather additional truck stop business information.
 
 ![Yellow Pages Search Results](Images/Screenshot%202025-07-16%20011959.png)
-*Yellow Pages search results page*
+*Yellow Pages website scraped*
 
 ![Yellow Pages Business Listings](Images/Screenshot%202025-07-16%20012037.png)
-*Yellow Pages business listing details*
+*Yellow Pages  website scraped*
 
 ### 3. Yelp API Integration
 **Date: June 25, 2025**
