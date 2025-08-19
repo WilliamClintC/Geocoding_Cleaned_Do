@@ -83,6 +83,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="truck-stop-geocoding-data-processing-pipeline" class="level1">
 <h1>Truck Stop Geocoding Data Processing Pipeline</h1>
 <p><strong>Project completed under Prof.&nbsp;Ron Yang and Sarah Armitage</strong></p>
+<section id="table-of-contents" class="level2">
+<h2 class="anchored" data-anchor-id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#truck-stop-geocoding-data-processing-pipeline">Truck Stop Geocoding Data Processing Pipeline</a>
+<ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#challenges">Challenges</a></li>
+<li><a href="#final-output">Final Output</a>
+<ul>
+<li><a href="#original-data-fields">Original Data Fields</a></li>
+<li><a href="#processed-data-fields">Processed Data Fields</a></li>
+<li><a href="#match-rate-fields">Match Rate Fields</a></li>
+<li><a href="#temporal-consistency-field">Temporal Consistency Field</a></li>
+<li><a href="#reference-urls">Reference URLs</a></li>
+<li><a href="#manual-verification-field">Manual Verification Field</a></li>
+<li><a href="#final-coordinates">Final Coordinates</a></li>
+</ul></li>
+<li><a href="#data-sources-and-collection-timeline">Data Sources and Collection Timeline</a>
+<ul>
+<li><a href="#1-truck-stops-and-services-and-rvers-and-travellers-website-scraping">1. Truck Stops and Services and RVers and Travellers Website Scraping</a></li>
+<li><a href="#2-yellow-pages-scraping">2. Yellow Pages Scraping</a></li>
+<li><a href="#3-yelp-api-integration">3. Yelp API Integration</a></li>
+</ul></li>
+<li><a href="#project-structure">Project Structure</a></li>
+<li><a href="#usage">Usage</a></li>
+</ul></li>
+</ul>
+</section>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>This study utilizes a comprehensive truck stop directory dataset containing information about individual truck stops. Notably, the original dataset does not include geographic coordinates (latitude and longitude). The objective of this project is to systematically extract and assign accurate geographic coordinates to each truck stop entry.</p>
@@ -91,6 +120,64 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="challenges">Challenges</h2>
 <p>A significant challenge encountered in this process stems from the inconsistent formatting of address information. While some entries provide complete street addresses, others list only road names, highway exits, or mile markers. This lack of standardization complicates the process of automated geocoding and necessitates additional data processing steps.</p>
 <p>Furthermore, the dataset required extensive cleaning.</p>
+</section>
+<section id="final-output" class="level2">
+<h2 class="anchored" data-anchor-id="final-output">Final Output</h2>
+<p>The final output is <code>Data\Processed_Final\10_final.csv</code>, which contains the following columns:</p>
+<section id="original-data-fields" class="level3">
+<h3 class="anchored" data-anchor-id="original-data-fields">Original Data Fields</h3>
+<p><strong><code>clean_line1</code>, <code>clean_line2</code>, <code>line3</code></strong><br>
+These contain the original OCR-read data from the Truckers Friend truck stop directory. This is the “original” data without geocoordinates.</p>
+<p><strong><code>city</code>, <code>zip_code</code>, <code>label</code>, <code>phone</code>, <code>year</code>, <code>major_city</code>, <code>state</code>, <code>chain</code></strong><br>
+These fields came from the original data as well: - <code>label</code>: Name of the truck stop - <code>year</code>: Year of the truck stop directory where the data was sourced - <code>chain</code>: Truck stop chain (some truck stops are independent while others are nationwide franchises or chains) - Other fields are self-explanatory</p>
+</section>
+<section id="processed-data-fields" class="level3">
+<h3 class="anchored" data-anchor-id="processed-data-fields">Processed Data Fields</h3>
+<p><strong><code>Address_Type</code>, <code>Exit_Number</code>, <code>Main_Road</code>, <code>Secondary_Road</code>, <code>Exit_Number_2</code>, <code>Exit_Number_3</code>, <code>Tertiary_Road</code></strong><br>
+These fields were created to analyze the data and improve the matching process:</p>
+<ul>
+<li><strong><code>Address_Type</code></strong>: Categorizes addresses into three types:
+<ul>
+<li><code>Exit</code>: Address containing only highway and exit number</li>
+<li><code>Proper</code>: Standard address with number and road name</li>
+<li><code>Empty</code>: Any other format that doesn’t fit the above categories</li>
+</ul></li>
+<li><strong><code>Main_Road</code>, <code>Secondary_Road</code></strong>: Extract road information
+<ul>
+<li>For standard address “1234 Sesame and Elmer Street”: <code>Main_Road</code> = “Sesame Street”, <code>Secondary_Road</code> = “Elmer Street”</li>
+<li>For highway address “I-90 exit 25”: <code>Main_Road</code> = “I-90”, <code>Exit_Number</code> = “25”</li>
+<li>For complex highways “I-90 and I-25 exit 25”: <code>Secondary_Road</code> = “I-25”</li>
+</ul></li>
+<li><strong><code>Exit_Number_2/3</code></strong>: Additional exit numbers when present</li>
+<li><strong><code>Tertiary_Road</code></strong>: Third road when applicable</li>
+</ul>
+</section>
+<section id="match-rate-fields" class="level3">
+<h3 class="anchored" data-anchor-id="match-rate-fields">Match Rate Fields</h3>
+<p><strong><code>Scraped_phone_match_rate</code>, <code>Yelp_phone_match_rate</code>, <code>Yellowbook_phone_match_rate</code></strong><br>
+Binary variables indicating phone number matches in associated sources: - <code>Scraped_phone_match_rate</code>: True if phone number matches in RVers and Travellers or Truck Stops and Services - <code>Yelp_phone_match_rate</code>: True if phone number matches in Yelp API - <code>Yellowbook_phone_match_rate</code>: True if phone number matches in Yellow Pages</p>
+</section>
+<section id="temporal-consistency-field" class="level3">
+<h3 class="anchored" data-anchor-id="temporal-consistency-field">Temporal Consistency Field</h3>
+<p><strong><code>place_identifier(year)</code></strong><br>
+This variable identifies consecutive entries of the same truck stop across different years. For example, if we have data for a truck stop in 2006, 2007, 2008, 2014, 2015, and 2016, this identifier helps handle inconsistencies due to OCR errors, data cleaning errors, or genuine changes.</p>
+<p>If geocoordinates are missing for 2007 but available for 2006 and 2008, and the place identifier confirms it’s the same truck stop, we can reasonably impute the 2007 coordinates using data from adjacent years.</p>
+</section>
+<section id="reference-urls" class="level3">
+<h3 class="anchored" data-anchor-id="reference-urls">Reference URLs</h3>
+<p><strong><code>Webscraped_Phone_full_url</code>, <code>Webscraped_PlacedMatched_full_url</code>, <code>Yelp_URL</code>, <code>YellowPages_SEARCH_URL</code></strong><br>
+These contain URLs associated with scraped data and API data, useful for debugging and manually verifying entries to spot discrepancies.</p>
+</section>
+<section id="manual-verification-field" class="level3">
+<h3 class="anchored" data-anchor-id="manual-verification-field">Manual Verification Field</h3>
+<p><strong><code>Match_Comments</code></strong><br>
+A comment field used for manually matching entries. When manual matching was required due to lack of automated matches, or when problematic entries needed review and correction, this field indicates that coordinates were manually corrected or verified. It contains specific details about how the match was verified and the source of the “correct” geocoordinate match.</p>
+</section>
+<section id="final-coordinates" class="level3">
+<h3 class="anchored" data-anchor-id="final-coordinates">Final Coordinates</h3>
+<p><strong><code>Final_Lat</code>, <code>Final_Long</code></strong><br>
+The primary output of this project containing the geocoordinates (latitude and longitude) of each truck stop entry.</p>
+</section>
 </section>
 <section id="data-sources-and-collection-timeline" class="level2">
 <h2 class="anchored" data-anchor-id="data-sources-and-collection-timeline">Data Sources and Collection Timeline</h2>
@@ -128,9 +215,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="project-structure" class="level2">
 <h2 class="anchored" data-anchor-id="project-structure">Project Structure</h2>
-<pre><code>├── main.py                     # Master pipeline execution script
+<pre><code>├── main.py                     # Master execution script
 ├── Code/
-│   ├── data_cleaning.py        # Data cleaning and preprocessing
+│   ├── data_cleaning.py        # Data cleaning and processing
 │   └── data_finalization.py    # Final data processing and output
 ├── Data/
 │   ├── Raw/                    # Original source data
