@@ -105,7 +105,7 @@ The primary output of this project containing the geocoordinates (latitude and l
 The project utilized three sources to gather truck stop information and geographic coordinates:
 
 ### 1. Truck Stops and Services and RVers and Travellers Website Scraping
-**Date: June 13, 2025**
+**Date Scraped: June 13, 2025**
 
 - **RVers and Travellers**: http://www.rvandtravelers.com/
 - **Truck Stops and Services**: https://www.truckstopsandservices.com/
@@ -119,7 +119,7 @@ These two websites share similar formatting but with slightly different availabi
 *Example of RVers and Travellers website scraped*
 
 ### 2. Yellow Pages Scraping
-**Date: July 6, 2025**
+**Date Scraped: July 6, 2025**
 
 - **Yellow Pages**: https://www.yellowpages.com/
 
@@ -132,7 +132,7 @@ Yellow Pages was scraped to gather additional truck stop business information.
 *Yellow Pages  website scraped*
 
 ### 3. Yelp API Integration
-**Date: June 25, 2025**
+**Date Accessed: June 25, 2025**
 
 - **Yelp API**: https://www.yelp.com/
 
