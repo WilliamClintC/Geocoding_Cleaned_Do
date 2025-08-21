@@ -2085,29 +2085,33 @@ def process_add_2_workflow(df_main, df_truck_stops):
         # Replace 'nan' strings with actual NaN
         df_main['Exit_Number_3'] = df_main['Exit_Number_3'].replace(['nan', '<NA>', 'None'], pd.NA)
     
-    # Apply manual corrections for specific rows (if they exist)
-    print("Applying manual corrections...")
-    
-    # Check if we have enough rows for the manual corrections
-    if len(df_main) > 77:
-        rows_to_update = [75, 76, 77]
-        
-        # Ensure Exit_Number_3 column exists
-        if 'Exit_Number_3' not in df_main.columns:
-            df_main['Exit_Number_3'] = pd.NA
-        
-        # Apply manual corrections
-        correction_count = 0
-        for row in rows_to_update:
-            if row < len(df_main):  # Make sure the row exists
+    # Apply manual corrections for rows where place_identifier(year) == 13.0
+    print("Applying manual corrections for place_identifier(year) == 13.0 ...")
+    if 'place_identifier(year)' in df_main.columns:
+        mask = df_main['place_identifier(year)'] == 13.0
+        rows_to_update = df_main.index[mask].tolist()
+        if rows_to_update:
+            # Ensure columns exist
+            if 'Exit_Number_3' not in df_main.columns:
+                df_main['Exit_Number_3'] = pd.NA
+            if 'Exit_Number_2' not in df_main.columns:
+                df_main['Exit_Number_2'] = pd.NA
+            if 'Tertiary_Road' not in df_main.columns:
+                df_main['Tertiary_Road'] = pd.NA
+            if 'Main_Road' not in df_main.columns:
+                df_main['Main_Road'] = pd.NA
+            correction_count = 0
+            for row in rows_to_update:
+                df_main.at[row, 'Main_Road'] = 'I-15-80'
+                df_main.at[row, 'Tertiary_Road'] = 'UT 201'
                 df_main.at[row, 'Exit_Number_2'] = '122'
                 df_main.at[row, 'Exit_Number_3'] = '17'
-                df_main.at[row, 'Tertiary_Road'] = 'UT-201'
                 correction_count += 1
-        
-        print(f"Applied manual corrections to {correction_count} rows (75, 76, 77)")
+            print(f"Applied manual corrections to {correction_count} rows where place_identifier(year) == 13.0")
+        else:
+            print("No rows found with place_identifier(year) == 13.0 for manual corrections.")
     else:
-        print("Dataset too small for manual corrections (rows 75-77 don't exist)")
+        print("Column 'place_identifier(year)' not found in dataframe. Skipping manual corrections.")
     
     # Report data types after conversion
     print("Data type conversions completed:")
