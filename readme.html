@@ -100,6 +100,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#reference-urls">Reference URLs</a></li>
 <li><a href="#manual-verification-field">Manual Verification Field</a></li>
 <li><a href="#final-coordinates">Final Coordinates</a></li>
+<li><a href="#supplementary-fields">Supplementary Fields</a>
+<ul>
+<li><a href="#address-standardization-fields">Address Standardization Fields</a></li>
+<li><a href="#webscraped-phone-fields">Webscraped Phone Fields</a>
+<ul>
+<li><a href="#general-information">General Information</a></li>
+<li><a href="#location-details">Location Details</a></li>
+<li><a href="#contact-information">Contact Information</a></li>
+<li><a href="#amenities--services">Amenities &amp; Services</a></li>
+<li><a href="#fuel-types--links">Fuel Types &amp; Links</a></li>
+<li><a href="#place-matching">Place Matching</a></li>
+<li><a href="#matched-place-details">Matched Place Details</a></li>
+</ul></li>
+<li><a href="#yelp-fields">Yelp Fields</a>
+<ul>
+<li><a href="#general-business-information">General Business Information</a></li>
+<li><a href="#location-details-1">Location Details</a></li>
+<li><a href="#contact--business-attributes">Contact &amp; Business Attributes</a></li>
+</ul></li>
+<li><a href="#yellow-pages-fields">Yellow Pages Fields</a>
+<ul>
+<li><a href="#general-business-information-1">General Business Information</a></li>
+<li><a href="#location-details-2">Location Details</a></li>
+<li><a href="#contact--business-attributes-1">Contact &amp; Business Attributes</a></li>
+</ul></li>
+<li><a href="#distance-fields">Distance Fields</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#data-sources-and-collection-timeline">Data Sources and Collection Timeline</a>
 <ul>
@@ -114,7 +141,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This study utilizes a comprehensive truck stop directory dataset containing information about individual truck stops. Notably, the original dataset does not include geographic coordinates (latitude and longitude). The objective of this project is to systematically extract and assign accurate geographic coordinates to each truck stop entry.</p>
+<p>This study utilizes a truck stop directory dataset (The Trucker’s Friend: National Truck Stop Directory) containing information about individual truck stops. Notably, the original dataset does not include geographic coordinates (latitude and longitude). The objective of this project is to systematically extract and assign accurate geographic coordinates to each truck stop entry.</p>
+<p>This README provides an overview of the project. More details on the matching processes and the intermediate/raw files are available at: https://github.com/WilliamClintC/Geocoding_Documentation/blob/main/6.pdf</p>
 </section>
 <section id="challenges" class="level2">
 <h2 class="anchored" data-anchor-id="challenges">Challenges</h2>
@@ -154,6 +182,8 @@ These fields were created to analyze the data and improve the matching process:<
 </section>
 <section id="match-rate-fields" class="level3">
 <h3 class="anchored" data-anchor-id="match-rate-fields">Match Rate Fields</h3>
+<p><strong><code>Scraped_zipcode_to_label_match_rate</code></strong><br>
+Binary variables that indicate whether a successful addresses and business names match was found with RVers and Travellers or Truck Stops and Services website.</p>
 <p><strong><code>Scraped_phone_match_rate</code>, <code>Yelp_phone_match_rate</code>, <code>Yellowbook_phone_match_rate</code></strong><br>
 Binary variables indicating phone number matches in associated sources: - <code>Scraped_phone_match_rate</code>: True if phone number matches in RVers and Travellers or Truck Stops and Services - <code>Yelp_phone_match_rate</code>: True if phone number matches in Yelp API - <code>Yellowbook_phone_match_rate</code>: True if phone number matches in Yellow Pages</p>
 </section>
@@ -166,7 +196,7 @@ This variable identifies consecutive entries of the same truck stop across diffe
 <section id="reference-urls" class="level3">
 <h3 class="anchored" data-anchor-id="reference-urls">Reference URLs</h3>
 <p><strong><code>Webscraped_Phone_full_url</code>, <code>Webscraped_PlacedMatched_full_url</code>, <code>Yelp_URL</code>, <code>YellowPages_SEARCH_URL</code></strong><br>
-These contain URLs associated with scraped data and API data, useful for debugging and manually verifying entries to spot discrepancies.</p>
+These fields contain URLs associated with scraped data and API data, useful for debugging and manually verifying entries to spot discrepancies.</p>
 </section>
 <section id="manual-verification-field" class="level3">
 <h3 class="anchored" data-anchor-id="manual-verification-field">Manual Verification Field</h3>
@@ -178,13 +208,722 @@ A comment field used for manually matching entries. When manual matching was req
 <p><strong><code>Final_Lat</code>, <code>Final_Long</code></strong><br>
 The primary output of this project containing the geocoordinates (latitude and longitude) of each truck stop entry.</p>
 </section>
+<section id="supplementary-fields" class="level3">
+<h3 class="anchored" data-anchor-id="supplementary-fields">Supplementary Fields</h3>
+<p>The project also includes a CSV file called <code>10_supplementary.csv</code>, which contains supplementary fields. These fields may be helpful but are not necessarily required:</p>
+<ul>
+<li><strong><code>Flag_Place_Change</code></strong>: Identifies if a truck stop has changed its name or chain affiliation over the years. Useful for tracking changes in ownership or branding.</li>
+<li><strong><code>Flag_Place_Change_Year</code></strong>: Indicates the year of the change.</li>
+<li><strong><code>Similarity_Score</code></strong>: Indicates how similar the current truck stop is to the previous year’s entry. A high score suggests minimal changes, while a low score indicates potential changes in name or chain affiliation.</li>
+<li><strong><code>Chain_Match</code></strong>: Checks if a chain affiliation has changed from the previous year.</li>
+<li><strong><code>Previous_Year_Label</code>, <code>Previous_Year_Chain</code></strong>: Provide details about the truck stop’s label and chain affiliation from the previous year.</li>
+</ul>
+<section id="address-standardization-fields" class="level4">
+<h4 class="anchored" data-anchor-id="address-standardization-fields">Address Standardization Fields</h4>
+<ul>
+<li><strong><code>address_standardized_ON_parenthesis</code></strong>: A human-readable address containing details useful for a trucker that is lost and needs to find a place. This format is not ideal for database matching or geocoding.</li>
+<li><strong><code>address_standardized_OFF_parenthesis</code></strong>: The main address used for matching and geocoding.</li>
+</ul>
+</section>
+<section id="webscraped-phone-fields" class="level4">
+<h4 class="anchored" data-anchor-id="webscraped-phone-fields">Webscraped Phone Fields</h4>
+<p>These fields contain details matched with the RVers and Travellers and Truck Stops and Services websites.</p>
+<section id="general-information" class="level5">
+<h5 class="anchored" data-anchor-id="general-information">General Information</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_state_id</code></td>
+<td style="text-align: left;">State identifier for phone match</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_state</code></td>
+<td style="text-align: left;">State for phone match</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_name</code></td>
+<td style="text-align: left;">Name of phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_href</code></td>
+<td style="text-align: left;">Relative URL for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_full_url</code></td>
+<td style="text-align: left;">Full URL for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_stop_type</code></td>
+<td style="text-align: left;">Stop type for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Chain</code></td>
+<td style="text-align: left;">Chain for phone-matched place</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="location-details" class="level5">
+<h5 class="anchored" data-anchor-id="location-details">Location Details</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Latitude</code></td>
+<td style="text-align: left;">Latitude for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Longitude</code></td>
+<td style="text-align: left;">Longitude for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_LD_URL</code></td>
+<td style="text-align: left;">Linked data URL for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_LD_Latitude</code></td>
+<td style="text-align: left;">Linked data latitude for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_LD_Longitude</code></td>
+<td style="text-align: left;">Linked data longitude for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Highway</code></td>
+<td style="text-align: left;">Highway for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Exit</code></td>
+<td style="text-align: left;">Exit number for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Mile Marker</code></td>
+<td style="text-align: left;">Mile marker for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Street Address</code></td>
+<td style="text-align: left;">Street address for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_City</code></td>
+<td style="text-align: left;">City for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_State</code></td>
+<td style="text-align: left;">State abbreviation for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Postal Code</code></td>
+<td style="text-align: left;">Postal code for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Road Name</code></td>
+<td style="text-align: left;">Road name for phone-matched place</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="contact-information" class="level5">
+<h5 class="anchored" data-anchor-id="contact-information">Contact Information</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Phone</code></td>
+<td style="text-align: left;">Main contact number for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Phone 2</code></td>
+<td style="text-align: left;">Additional phone for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Phone 3</code></td>
+<td style="text-align: left;">Additional phone for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Phone 4</code></td>
+<td style="text-align: left;">Additional phone for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Phone 5</code></td>
+<td style="text-align: left;">Additional phone for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Fax</code></td>
+<td style="text-align: left;">Fax for phone-matched place</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="amenities-services" class="level5">
+<h5 class="anchored" data-anchor-id="amenities-services">Amenities &amp; Services</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_# of Parking Spots</code></td>
+<td style="text-align: left;">Total parking spaces for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_# of Reserved Parking Spots</code></td>
+<td style="text-align: left;">Reserved spaces for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_# of Paid Parking Spots</code></td>
+<td style="text-align: left;">Paid-only spots for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_# of Fuel Lanes</code></td>
+<td style="text-align: left;">Fuel lanes for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_# of Showers</code></td>
+<td style="text-align: left;">Showers for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_# of Men's Showers</code></td>
+<td style="text-align: left;">Men’s showers for phone-matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_# of Truck Service Bays</code></td>
+<td style="text-align: left;">Truck service bays for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Hours of Operation</code></td>
+<td style="text-align: left;">Hours for phone-matched place</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fuel-types-links" class="level5">
+<h5 class="anchored" data-anchor-id="fuel-types-links">Fuel Types &amp; Links</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Unleaded</code></td>
+<td style="text-align: left;">Whether unleaded gasoline is available</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Diesel</code></td>
+<td style="text-align: left;">Whether diesel fuel is available</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_Bulk Def</code></td>
+<td style="text-align: left;">Whether DEF (diesel exhaust fluid) is available</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_Propane</code></td>
+<td style="text-align: left;">Whether propane is available</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_Phone_https</code></td>
+<td style="text-align: left;">HTTPS URL for phone-matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_Phone_http</code></td>
+<td style="text-align: left;">HTTP URL for phone-matched place</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="place-matching" class="level5">
+<h5 class="anchored" data-anchor-id="place-matching">Place Matching</h5>
+<p>These fields contain details for address and business name matches with the RVers and Travellers and Truck Stops and Services websites.</p>
+</section>
+<section id="matched-place-details" class="level5">
+<h5 class="anchored" data-anchor-id="matched-place-details">Matched Place Details</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_state_id</code></td>
+<td style="text-align: left;">State identifier for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_state</code></td>
+<td style="text-align: left;">State for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_name</code></td>
+<td style="text-align: left;">Name of matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_href</code></td>
+<td style="text-align: left;">Relative URL for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_full_url</code></td>
+<td style="text-align: left;">Full URL for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_stop_type</code></td>
+<td style="text-align: left;">Stop type for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Chain</code></td>
+<td style="text-align: left;">Chain for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Latitude</code></td>
+<td style="text-align: left;">Latitude for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Longitude</code></td>
+<td style="text-align: left;">Longitude for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_LD_URL</code></td>
+<td style="text-align: left;">Linked data URL for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_LD_Latitude</code></td>
+<td style="text-align: left;">Linked data latitude for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_LD_Longitude</code></td>
+<td style="text-align: left;">Linked data longitude for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Highway</code></td>
+<td style="text-align: left;">Highway for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Exit</code></td>
+<td style="text-align: left;">Exit number for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Mile Marker</code></td>
+<td style="text-align: left;">Mile marker for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Street Address</code></td>
+<td style="text-align: left;">Street address for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_City</code></td>
+<td style="text-align: left;">City for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_State</code></td>
+<td style="text-align: left;">State for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Postal Code</code></td>
+<td style="text-align: left;">Postal code for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Road Name</code></td>
+<td style="text-align: left;">Road name for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Phone</code></td>
+<td style="text-align: left;">Phone for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Phone 2</code></td>
+<td style="text-align: left;">Additional phone for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Phone 3</code></td>
+<td style="text-align: left;">Additional phone for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Phone 4</code></td>
+<td style="text-align: left;">Additional phone for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Phone 5</code></td>
+<td style="text-align: left;">Additional phone for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Fax</code></td>
+<td style="text-align: left;">Fax for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_# of Parking Spots</code></td>
+<td style="text-align: left;">Total parking spaces for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_# of Reserved Parking Spots</code></td>
+<td style="text-align: left;">Reserved spaces for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_# of Paid Parking Spots</code></td>
+<td style="text-align: left;">Paid-only spots for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_# of Fuel Lanes</code></td>
+<td style="text-align: left;">Fuel lanes for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_# of Showers</code></td>
+<td style="text-align: left;">Showers for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_# of Men's Showers</code></td>
+<td style="text-align: left;">Men’s showers for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_# of Truck Service Bays</code></td>
+<td style="text-align: left;">Truck service bays for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Unleaded</code></td>
+<td style="text-align: left;">Whether unleaded gasoline is available for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Diesel</code></td>
+<td style="text-align: left;">Whether diesel fuel is available for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Bulk Def</code></td>
+<td style="text-align: left;">Whether DEF (diesel exhaust fluid) is available for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Propane</code></td>
+<td style="text-align: left;">Whether propane is available for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_Hours of Operation</code></td>
+<td style="text-align: left;">Hours for matched place</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_https</code></td>
+<td style="text-align: left;">HTTPS URL for matched place</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Webscraped_PlacedMatched_http</code></td>
+<td style="text-align: left;">HTTP URL for matched place</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="yelp-fields" class="level4">
+<h4 class="anchored" data-anchor-id="yelp-fields">Yelp Fields</h4>
+<p>These fields contain details associated with Yelp matches. A notable feature is the ability to observe whether the truck stop is still operational:</p>
+<section id="general-business-information" class="level5">
+<h5 class="anchored" data-anchor-id="general-business-information">General Business Information</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Yelp_Original_Phone</code></td>
+<td style="text-align: left;">The phone number used as input for the Yelp phone search</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Yelp_Name</code></td>
+<td style="text-align: left;">The official name of the business</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Yelp_Rating</code></td>
+<td style="text-align: left;">Yelp rating (e.g., 4.5 stars)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Yelp_Review_Count</code></td>
+<td style="text-align: left;">Total number of Yelp reviews</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Yelp_Is_Closed</code></td>
+<td style="text-align: left;">Boolean indicating if the business is closed</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Yelp_URL</code></td>
+<td style="text-align: left;">Full Yelp business listing URL</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="location-details-1" class="level5">
+<h5 class="anchored" data-anchor-id="location-details-1">Location Details</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Yelp_Address</code></td>
+<td style="text-align: left;">Street address of the business</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Yelp_City</code></td>
+<td style="text-align: left;">City where the business is located</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Yelp_State</code></td>
+<td style="text-align: left;">State (abbreviation)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Yelp_Zip_Code</code></td>
+<td style="text-align: left;">Postal or ZIP code</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Yelp_Latitude</code></td>
+<td style="text-align: left;">Latitude coordinate</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Yelp_Longitude</code></td>
+<td style="text-align: left;">Longitude coordinate</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="contact-business-attributes" class="level5">
+<h5 class="anchored" data-anchor-id="contact-business-attributes">Contact &amp; Business Attributes</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 68%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>Yelp_Phone</code></td>
+<td style="text-align: left;">Official business phone number returned by Yelp</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>Yelp_Categories</code></td>
+<td style="text-align: left;">List of categories (e.g., “Coffee &amp; Tea”, “Gas Station”)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>Yelp_Price</code></td>
+<td style="text-align: left;">Price level indicator (<code>$</code>, <code>$$</code>, etc., if available)</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="yellow-pages-fields" class="level4">
+<h4 class="anchored" data-anchor-id="yellow-pages-fields">Yellow Pages Fields</h4>
+<p>These fields contain details associated with Yellow Pages matches. A notable feature is the AKA field which allows us to observe other names associated with the truck stop.</p>
+<section id="general-business-information-1" class="level5">
+<h5 class="anchored" data-anchor-id="general-business-information-1">General Business Information</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 36%">
+<col style="width: 63%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_ADDRESS</code></td>
+<td style="text-align: left;">Full address of the business as listed on Yellow Pages</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_AKA</code></td>
+<td style="text-align: left;">Alternate names or aliases for the business</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_BUSINESS_NAME</code></td>
+<td style="text-align: left;">The primary name of the business</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_BUSINESS_URL</code></td>
+<td style="text-align: left;">URL to the Yellow Pages business listing</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_CATEGORIES</code></td>
+<td style="text-align: left;">Business categories (e.g., “Restaurants”, “Auto Repair”)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_STATUS</code></td>
+<td style="text-align: left;">Business status (e.g., “Open”, “Closed”)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_WEBSITE</code></td>
+<td style="text-align: left;">Official website of the business, if available</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="location-details-2" class="level5">
+<h5 class="anchored" data-anchor-id="location-details-2">Location Details</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 36%">
+<col style="width: 63%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_JSONLD_CITY_1</code></td>
+<td style="text-align: left;">City extracted from the embedded structured JSON-LD data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_JSONLD_STATE_1</code></td>
+<td style="text-align: left;">State extracted from the embedded structured JSON-LD data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_JSONLD_STREET_1</code></td>
+<td style="text-align: left;">Street address from JSON-LD</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_JSONLD_ZIP_1</code></td>
+<td style="text-align: left;">ZIP code from JSON-LD</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_JSONLD_LAT_1</code></td>
+<td style="text-align: left;">Latitude coordinate from JSON-LD</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_JSONLD_LNG_1</code></td>
+<td style="text-align: left;">Longitude coordinate from JSON-LD</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="contact-business-attributes-1" class="level5">
+<h5 class="anchored" data-anchor-id="contact-business-attributes-1">Contact &amp; Business Attributes</h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 36%">
+<col style="width: 63%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Column Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_ORIGINAL_PHONE</code></td>
+<td style="text-align: left;">Phone number used to initiate the Yellow Pages lookup</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_FORMATTED_PHONE</code></td>
+<td style="text-align: left;">Formatted business phone number as displayed</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_JSONLD_PHONE_1</code></td>
+<td style="text-align: left;">Phone number from the structured JSON-LD data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_EXTRA_PHONES</code></td>
+<td style="text-align: left;">Any additional phone numbers found</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_PHONE</code></td>
+<td style="text-align: left;">Phone number listed in the primary Yellow Pages HTML content</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_JSONLD_NAME_1</code></td>
+<td style="text-align: left;">Business name from structured JSON-LD data</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>YellowPages_SCRAPED_AT</code></td>
+<td style="text-align: left;">Date/time when the data was scraped</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>YellowPages_SEARCH_URL</code></td>
+<td style="text-align: left;">URL used for the Yellow Pages search</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="distance-fields" class="level4">
+<h4 class="anchored" data-anchor-id="distance-fields">Distance Fields</h4>
+<ul>
+<li><strong><code>min_distance_miles</code></strong>: Captures the distance between two matches from different sources. For example, if Match A is from Yelp source and Match B is from Yellowpages, this field calculates the distance between the two coordinates.</li>
+<li><strong><code>min_distance_sources</code></strong>: Indicates the sources of the matches used for the final match. For example, it shows if Yelp matched onto Yellow Pages or Yelp matched onto Truck Stops and Services (phone), etc.</li>
+</ul>
+</section>
+</section>
 </section>
 <section id="data-sources-and-collection-timeline" class="level2">
 <h2 class="anchored" data-anchor-id="data-sources-and-collection-timeline">Data Sources and Collection Timeline</h2>
 <p>The project utilized three sources to gather truck stop information and geographic coordinates:</p>
 <section id="truck-stops-and-services-and-rvers-and-travellers-website-scraping" class="level3">
 <h3 class="anchored" data-anchor-id="truck-stops-and-services-and-rvers-and-travellers-website-scraping">1. Truck Stops and Services and RVers and Travellers Website Scraping</h3>
-<p><strong>Date: June 13, 2025</strong></p>
+<p><strong>Date Scraped: June 13, 2025</strong></p>
 <ul>
 <li><strong>RVers and Travellers</strong>: http://www.rvandtravelers.com/</li>
 <li><strong>Truck Stops and Services</strong>: https://www.truckstopsandservices.com/</li>
@@ -195,17 +934,17 @@ The primary output of this project containing the geocoordinates (latitude and l
 </section>
 <section id="yellow-pages-scraping" class="level3">
 <h3 class="anchored" data-anchor-id="yellow-pages-scraping">2. Yellow Pages Scraping</h3>
-<p><strong>Date: July 6, 2025</strong></p>
+<p><strong>Date Scraped: July 6, 2025</strong></p>
 <ul>
 <li><strong>Yellow Pages</strong>: https://www.yellowpages.com/</li>
 </ul>
 <p>Yellow Pages was scraped to gather additional truck stop business information.</p>
-<p><img src="Images/Screenshot%202025-07-16%20011959.png" class="img-fluid" alt="Yellow Pages Search Results"> <em>Yellow Pages search results page</em></p>
-<p><img src="Images/Screenshot%202025-07-16%20012037.png" class="img-fluid" alt="Yellow Pages Business Listings"> <em>Yellow Pages business listing details</em></p>
+<p><img src="Images/Screenshot%202025-07-16%20011959.png" class="img-fluid" alt="Yellow Pages Search Results"> <em>Yellow Pages website scraped</em></p>
+<p><img src="Images/Screenshot%202025-07-16%20012037.png" class="img-fluid" alt="Yellow Pages Business Listings"> <em>Yellow Pages website scraped</em></p>
 </section>
 <section id="yelp-api-integration" class="level3">
 <h3 class="anchored" data-anchor-id="yelp-api-integration">3. Yelp API Integration</h3>
-<p><strong>Date: June 25, 2025</strong></p>
+<p><strong>Date Accessed: June 25, 2025</strong></p>
 <ul>
 <li><strong>Yelp API</strong>: https://www.yelp.com/</li>
 </ul>

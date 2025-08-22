@@ -16,6 +16,25 @@
     - [Reference URLs](#reference-urls)
     - [Manual Verification Field](#manual-verification-field)
     - [Final Coordinates](#final-coordinates)
+    - [Supplementary Fields](#supplementary-fields)
+      - [Address Standardization Fields](#address-standardization-fields)
+      - [Webscraped Phone Fields](#webscraped-phone-fields)
+        - [General Information](#general-information)
+        - [Location Details](#location-details)
+        - [Contact Information](#contact-information)
+        - [Amenities \& Services](#amenities--services)
+        - [Fuel Types \& Links](#fuel-types--links)
+        - [Place Matching](#place-matching)
+        - [Matched Place Details](#matched-place-details)
+      - [Yelp Fields](#yelp-fields)
+        - [General Business Information](#general-business-information)
+        - [Location Details](#location-details-1)
+        - [Contact \& Business Attributes](#contact--business-attributes)
+      - [Yellow Pages Fields](#yellow-pages-fields)
+        - [General Business Information](#general-business-information-1)
+        - [Location Details](#location-details-2)
+        - [Contact \& Business Attributes](#contact--business-attributes-1)
+      - [Distance Fields](#distance-fields)
   - [Data Sources and Collection Timeline](#data-sources-and-collection-timeline)
     - [1. Truck Stops and Services and RVers and Travellers Website Scraping](#1-truck-stops-and-services-and-rvers-and-travellers-website-scraping)
     - [2. Yellow Pages Scraping](#2-yellow-pages-scraping)
@@ -72,6 +91,9 @@ These fields were created to analyze the data and improve the matching process:
 
 ### Match Rate Fields
 
+**`Scraped_zipcode_to_label_match_rate`**  
+Binary variables that indicate whether a successful addresses and business names match was found with RVers and Travellers or Truck Stops and Services website.
+
 **`Scraped_phone_match_rate`, `Yelp_phone_match_rate`, `Yellowbook_phone_match_rate`**  
 Binary variables indicating phone number matches in associated sources:
 - `Scraped_phone_match_rate`: True if phone number matches in RVers and Travellers or Truck Stops and Services
@@ -88,7 +110,7 @@ If geocoordinates are missing for 2007 but available for 2006 and 2008, and the 
 ### Reference URLs
 
 **`Webscraped_Phone_full_url`, `Webscraped_PlacedMatched_full_url`, `Yelp_URL`, `YellowPages_SEARCH_URL`**  
-These contain URLs associated with scraped data and API data, useful for debugging and manually verifying entries to spot discrepancies.
+These fields contain URLs associated with scraped data and API data, useful for debugging and manually verifying entries to spot discrepancies.
 
 ### Manual Verification Field
 
@@ -99,6 +121,219 @@ A comment field used for manually matching entries. When manual matching was req
 
 **`Final_Lat`, `Final_Long`**  
 The primary output of this project containing the geocoordinates (latitude and longitude) of each truck stop entry.
+
+### Supplementary Fields
+
+The project also includes a CSV file called `10_supplementary.csv`, which contains supplementary fields. These fields may be helpful but are not necessarily required:
+
+- **`Flag_Place_Change`**: Identifies if a truck stop has changed its name or chain affiliation over the years. Useful for tracking changes in ownership or branding.
+- **`Flag_Place_Change_Year`**: Indicates the year of the change.
+- **`Similarity_Score`**: Indicates how similar the current truck stop is to the previous year's entry. A high score suggests minimal changes, while a low score indicates potential changes in name or chain affiliation.
+- **`Chain_Match`**: Checks if a chain affiliation has changed from the previous year.
+- **`Previous_Year_Label`, `Previous_Year_Chain`**: Provide details about the truck stop's label and chain affiliation from the previous year.
+
+#### Address Standardization Fields
+
+- **`address_standardized_ON_parenthesis`**: A human-readable address containing details useful for a trucker that is lost and needs to find a place. This format is not ideal for database matching or geocoding.
+- **`address_standardized_OFF_parenthesis`**: The main address used for matching and geocoding.
+
+#### Webscraped Phone Fields
+
+These fields contain details matched with the RVers and Travellers and Truck Stops and Services websites.
+
+##### General Information
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_Phone_state_id`    | State identifier for phone match             |
+| `Webscraped_Phone_state`       | State for phone match                        |
+| `Webscraped_Phone_name`        | Name of phone-matched place                  |
+| `Webscraped_Phone_href`        | Relative URL for phone-matched place         |
+| `Webscraped_Phone_full_url`    | Full URL for phone-matched place             |
+| `Webscraped_Phone_stop_type`   | Stop type for phone-matched place            |
+| `Webscraped_Phone_Chain`       | Chain for phone-matched place                |
+
+##### Location Details
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_Phone_Latitude`    | Latitude for phone-matched place             |
+| `Webscraped_Phone_Longitude`   | Longitude for phone-matched place            |
+| `Webscraped_Phone_LD_URL`      | Linked data URL for phone-matched place      |
+| `Webscraped_Phone_LD_Latitude` | Linked data latitude for phone-matched place |
+| `Webscraped_Phone_LD_Longitude`| Linked data longitude for phone-matched place|
+| `Webscraped_Phone_Highway`     | Highway for phone-matched place              |
+| `Webscraped_Phone_Exit`        | Exit number for phone-matched place          |
+| `Webscraped_Phone_Mile Marker` | Mile marker for phone-matched place          |
+| `Webscraped_Phone_Street Address` | Street address for phone-matched place    |
+| `Webscraped_Phone_City`        | City for phone-matched place                 |
+| `Webscraped_Phone_State`       | State abbreviation for phone-matched place   |
+| `Webscraped_Phone_Postal Code` | Postal code for phone-matched place          |
+| `Webscraped_Phone_Road Name`   | Road name for phone-matched place            |
+
+##### Contact Information
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_Phone_Phone`       | Main contact number for phone-matched place  |
+| `Webscraped_Phone_Phone 2`     | Additional phone for phone-matched place     |
+| `Webscraped_Phone_Phone 3`     | Additional phone for phone-matched place     |
+| `Webscraped_Phone_Phone 4`     | Additional phone for phone-matched place     |
+| `Webscraped_Phone_Phone 5`     | Additional phone for phone-matched place     |
+| `Webscraped_Phone_Fax`         | Fax for phone-matched place                  |
+
+##### Amenities & Services
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_Phone_# of Parking Spots`           | Total parking spaces for phone-matched place             |
+| `Webscraped_Phone_# of Reserved Parking Spots`  | Reserved spaces for phone-matched place                  |
+| `Webscraped_Phone_# of Paid Parking Spots`      | Paid-only spots for phone-matched place                  |
+| `Webscraped_Phone_# of Fuel Lanes`              | Fuel lanes for phone-matched place                       |
+| `Webscraped_Phone_# of Showers`                 | Showers for phone-matched place                          |
+| `Webscraped_Phone_# of Men's Showers`           | Men's showers for phone-matched place                    |
+| `Webscraped_Phone_# of Truck Service Bays`      | Truck service bays for phone-matched place               |
+| `Webscraped_Phone_Hours of Operation`           | Hours for phone-matched place                            |
+
+##### Fuel Types & Links
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_Phone_Unleaded`    | Whether unleaded gasoline is available        |
+| `Webscraped_Phone_Diesel`      | Whether diesel fuel is available              |
+| `Webscraped_Phone_Bulk Def`    | Whether DEF (diesel exhaust fluid) is available |
+| `Webscraped_Phone_Propane`     | Whether propane is available                  |
+| `Webscraped_Phone_https`       | HTTPS URL for phone-matched place             |
+| `Webscraped_Phone_http`        | HTTP URL for phone-matched place              |
+
+##### Place Matching
+
+These fields contain details for address and business name matches with the RVers and Travellers and Truck Stops and Services websites.
+
+##### Matched Place Details
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_PlacedMatched_state_id`    | State identifier for matched place           |
+| `Webscraped_PlacedMatched_state`       | State for matched place                      |
+| `Webscraped_PlacedMatched_name`        | Name of matched place                        |
+| `Webscraped_PlacedMatched_href`        | Relative URL for matched place               |
+| `Webscraped_PlacedMatched_full_url`    | Full URL for matched place                   |
+| `Webscraped_PlacedMatched_stop_type`   | Stop type for matched place                  |
+| `Webscraped_PlacedMatched_Chain`       | Chain for matched place                      |
+| `Webscraped_PlacedMatched_Latitude`    | Latitude for matched place                   |
+| `Webscraped_PlacedMatched_Longitude`   | Longitude for matched place                  |
+| `Webscraped_PlacedMatched_LD_URL`      | Linked data URL for matched place            |
+| `Webscraped_PlacedMatched_LD_Latitude` | Linked data latitude for matched place       |
+| `Webscraped_PlacedMatched_LD_Longitude`| Linked data longitude for matched place      |
+| `Webscraped_PlacedMatched_Highway`     | Highway for matched place                    |
+| `Webscraped_PlacedMatched_Exit`        | Exit number for matched place                |
+| `Webscraped_PlacedMatched_Mile Marker` | Mile marker for matched place                |
+| `Webscraped_PlacedMatched_Street Address` | Street address for matched place           |
+| `Webscraped_PlacedMatched_City`        | City for matched place                       |
+| `Webscraped_PlacedMatched_State`       | State for matched place                      |
+| `Webscraped_PlacedMatched_Postal Code` | Postal code for matched place                |
+| `Webscraped_PlacedMatched_Road Name`   | Road name for matched place                  |
+| `Webscraped_PlacedMatched_Phone`       | Phone for matched place                      |
+| `Webscraped_PlacedMatched_Phone 2`     | Additional phone for matched place           |
+| `Webscraped_PlacedMatched_Phone 3`     | Additional phone for matched place           |
+| `Webscraped_PlacedMatched_Phone 4`     | Additional phone for matched place           |
+| `Webscraped_PlacedMatched_Phone 5`     | Additional phone for matched place           |
+| `Webscraped_PlacedMatched_Fax`         | Fax for matched place                        |
+| `Webscraped_PlacedMatched_# of Parking Spots`           | Total parking spaces for matched place      |
+| `Webscraped_PlacedMatched_# of Reserved Parking Spots`  | Reserved spaces for matched place           |
+| `Webscraped_PlacedMatched_# of Paid Parking Spots`      | Paid-only spots for matched place           |
+| `Webscraped_PlacedMatched_# of Fuel Lanes`              | Fuel lanes for matched place                |
+| `Webscraped_PlacedMatched_# of Showers`                 | Showers for matched place                   |
+| `Webscraped_PlacedMatched_# of Men's Showers`           | Men's showers for matched place             |
+| `Webscraped_PlacedMatched_# of Truck Service Bays`      | Truck service bays for matched place        |
+| `Webscraped_PlacedMatched_Unleaded`    | Whether unleaded gasoline is available for matched place          |
+| `Webscraped_PlacedMatched_Diesel`      | Whether diesel fuel is available for matched place            |
+| `Webscraped_PlacedMatched_Bulk Def`    | Whether DEF (diesel exhaust fluid) is available for matched place |
+| `Webscraped_PlacedMatched_Propane`     | Whether propane is available for matched place                  |
+| `Webscraped_PlacedMatched_Hours of Operation` | Hours for matched place                   |
+| `Webscraped_PlacedMatched_https`       | HTTPS URL for matched place                  |
+| `Webscraped_PlacedMatched_http`        | HTTP URL for matched place                   |
+
+#### Yelp Fields
+
+These fields contain details associated with Yelp matches. A notable feature is the ability to observe whether the truck stop is still operational:
+
+##### General Business Information
+
+| Column Name | Description |
+|:---------------------|:-----------------------------------------------|
+| `Yelp_Original_Phone`| The phone number used as input for the Yelp phone search |
+| `Yelp_Name`          | The official name of the business              |
+| `Yelp_Rating`        | Yelp rating (e.g., 4.5 stars)                  |
+| `Yelp_Review_Count`  | Total number of Yelp reviews                   |
+| `Yelp_Is_Closed`     | Boolean indicating if the business is closed   |
+| `Yelp_URL`           | Full Yelp business listing URL                 |
+
+##### Location Details
+
+| Column Name | Description |
+|:---------------------|:-----------------------------------------------|
+| `Yelp_Address`       | Street address of the business                 |
+| `Yelp_City`          | City where the business is located             |
+| `Yelp_State`         | State (abbreviation)                           |
+| `Yelp_Zip_Code`      | Postal or ZIP code                             |
+| `Yelp_Latitude`      | Latitude coordinate                            |
+| `Yelp_Longitude`     | Longitude coordinate                           |
+
+##### Contact & Business Attributes
+
+| Column Name | Description |
+|:---------------------|:-----------------------------------------------|
+| `Yelp_Phone`         | Official business phone number returned by Yelp|
+| `Yelp_Categories`    | List of categories (e.g., "Coffee & Tea", "Gas Station") |
+| `Yelp_Price`         | Price level indicator (`$`, `$$`, etc., if available)    |
+
+#### Yellow Pages Fields
+
+These fields contain details associated with Yellow Pages matches. A notable feature is the AKA field which allows us to observe other names associated with the truck stop.
+
+##### General Business Information
+
+| Column Name | Description |
+|:--------------------------|:---------------------------------------------|
+| `YellowPages_ADDRESS`     | Full address of the business as listed on Yellow Pages |
+| `YellowPages_AKA`         | Alternate names or aliases for the business   |
+| `YellowPages_BUSINESS_NAME` | The primary name of the business           |
+| `YellowPages_BUSINESS_URL`  | URL to the Yellow Pages business listing    |
+| `YellowPages_CATEGORIES`    | Business categories (e.g., "Restaurants", "Auto Repair") |
+| `YellowPages_STATUS`        | Business status (e.g., "Open", "Closed")   |
+| `YellowPages_WEBSITE`       | Official website of the business, if available |
+
+##### Location Details
+
+| Column Name | Description |
+|:--------------------------|:---------------------------------------------|
+| `YellowPages_JSONLD_CITY_1`   | City extracted from the embedded structured JSON-LD data |
+| `YellowPages_JSONLD_STATE_1`  | State extracted from the embedded structured JSON-LD data |
+| `YellowPages_JSONLD_STREET_1` | Street address from JSON-LD                |
+| `YellowPages_JSONLD_ZIP_1`    | ZIP code from JSON-LD                      |
+| `YellowPages_JSONLD_LAT_1`    | Latitude coordinate from JSON-LD            |
+| `YellowPages_JSONLD_LNG_1`    | Longitude coordinate from JSON-LD           |
+
+##### Contact & Business Attributes
+
+| Column Name | Description |
+|:--------------------------|:---------------------------------------------|
+| `YellowPages_ORIGINAL_PHONE` | Phone number used to initiate the Yellow Pages lookup |
+| `YellowPages_FORMATTED_PHONE`| Formatted business phone number as displayed |
+| `YellowPages_JSONLD_PHONE_1` | Phone number from the structured JSON-LD data |
+| `YellowPages_EXTRA_PHONES`   | Any additional phone numbers found           |
+| `YellowPages_PHONE`          | Phone number listed in the primary Yellow Pages HTML content |
+| `YellowPages_JSONLD_NAME_1`  | Business name from structured JSON-LD data   |
+| `YellowPages_SCRAPED_AT`     | Date/time when the data was scraped          |
+| `YellowPages_SEARCH_URL`     | URL used for the Yellow Pages search         |
+
+#### Distance Fields
+
+- **`min_distance_miles`**: Captures the distance between two matches from different sources. For example, if Match A is from Yelp source and Match B is from Yellowpages, this field calculates the distance between the two coordinates.
+- **`min_distance_sources`**: Indicates the sources of the matches used for the final match. For example, it shows if Yelp matched onto Yellow Pages or Yelp matched onto Truck Stops and Services (phone), etc. 
+
 
 ## Data Sources and Collection Timeline
 
@@ -166,3 +401,4 @@ python main.py
 ```
 
 This master script orchestrates the entire workflow from raw data ingestion through final geocoded output generation.
+
