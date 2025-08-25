@@ -26,13 +26,18 @@
         - [Fuel Types \& Links](#fuel-types--links)
         - [Place Matching](#place-matching)
         - [Matched Place Details](#matched-place-details)
+          - [General Information](#general-information-1)
+          - [Location Details](#location-details-1)
+          - [Contact Information](#contact-information-1)
+          - [Amenities \& Services](#amenities--services-1)
+          - [Fuel Types \& Links](#fuel-types--links-1)
       - [Yelp Fields](#yelp-fields)
         - [General Business Information](#general-business-information)
-        - [Location Details](#location-details-1)
+        - [Location Details](#location-details-2)
         - [Contact \& Business Attributes](#contact--business-attributes)
       - [Yellow Pages Fields](#yellow-pages-fields)
         - [General Business Information](#general-business-information-1)
-        - [Location Details](#location-details-2)
+        - [Location Details](#location-details-3)
         - [Contact \& Business Attributes](#contact--business-attributes-1)
       - [Distance Fields](#distance-fields)
   - [Data Sources and Collection Timeline](#data-sources-and-collection-timeline)
@@ -157,17 +162,17 @@ These fields contain details matched with the RVers and Travellers and Truck Sto
 
 | Column Name | Description |
 |:-------------------------------|:---------------------------------------------|
-| `Webscraped_Phone_Latitude`    | Latitude for phone-matched place             |
-| `Webscraped_Phone_Longitude`   | Longitude for phone-matched place            |
-| `Webscraped_Phone_LD_URL`      | Linked data URL for phone-matched place      |
-| `Webscraped_Phone_LD_Latitude` | Linked data latitude for phone-matched place |
-| `Webscraped_Phone_LD_Longitude`| Linked data longitude for phone-matched place|
+| `Webscraped_Phone_Latitude`    | Website Visual Read Latitude for phone-matched place             |
+| `Webscraped_Phone_Longitude`   | Website Visual Read observed Longitude for phone-matched place            |
+| `Webscraped_Phone_LD_URL`      | Embedded website data URL for phone-matched place      |
+| `Webscraped_Phone_LD_Latitude` | Embedded website data latitude for phone-matched place |
+| `Webscraped_Phone_LD_Longitude`| Embedded website data longitude for phone-matched place|
 | `Webscraped_Phone_Highway`     | Highway for phone-matched place              |
 | `Webscraped_Phone_Exit`        | Exit number for phone-matched place          |
 | `Webscraped_Phone_Mile Marker` | Mile marker for phone-matched place          |
 | `Webscraped_Phone_Street Address` | Street address for phone-matched place    |
 | `Webscraped_Phone_City`        | City for phone-matched place                 |
-| `Webscraped_Phone_State`       | State abbreviation for phone-matched place   |
+| `Webscraped_Phone_State`       | State associated with phone-matched place   |
 | `Webscraped_Phone_Postal Code` | Postal code for phone-matched place          |
 | `Webscraped_Phone_Road Name`   | Road name for phone-matched place            |
 
@@ -212,6 +217,8 @@ These fields contain details for address and business name matches with the RVer
 
 ##### Matched Place Details
 
+###### General Information
+
 | Column Name | Description |
 |:-------------------------------|:---------------------------------------------|
 | `Webscraped_PlacedMatched_state_id`    | State identifier for matched place           |
@@ -221,33 +228,54 @@ These fields contain details for address and business name matches with the RVer
 | `Webscraped_PlacedMatched_full_url`    | Full URL for matched place                   |
 | `Webscraped_PlacedMatched_stop_type`   | Stop type for matched place                  |
 | `Webscraped_PlacedMatched_Chain`       | Chain for matched place                      |
-| `Webscraped_PlacedMatched_Latitude`    | Latitude for matched place                   |
-| `Webscraped_PlacedMatched_Longitude`   | Longitude for matched place                  |
-| `Webscraped_PlacedMatched_LD_URL`      | Linked data URL for matched place            |
-| `Webscraped_PlacedMatched_LD_Latitude` | Linked data latitude for matched place       |
-| `Webscraped_PlacedMatched_LD_Longitude`| Linked data longitude for matched place      |
-| `Webscraped_PlacedMatched_Highway`     | Highway for matched place                    |
-| `Webscraped_PlacedMatched_Exit`        | Exit number for matched place                |
-| `Webscraped_PlacedMatched_Mile Marker` | Mile marker for matched place                |
-| `Webscraped_PlacedMatched_Street Address` | Street address for matched place           |
-| `Webscraped_PlacedMatched_City`        | City for matched place                       |
-| `Webscraped_PlacedMatched_State`       | State for matched place                      |
-| `Webscraped_PlacedMatched_Postal Code` | Postal code for matched place                |
-| `Webscraped_PlacedMatched_Road Name`   | Road name for matched place                  |
-| `Webscraped_PlacedMatched_Phone`       | Phone for matched place                      |
-| `Webscraped_PlacedMatched_Phone 2`     | Additional phone for matched place           |
-| `Webscraped_PlacedMatched_Phone 3`     | Additional phone for matched place           |
-| `Webscraped_PlacedMatched_Phone 4`     | Additional phone for matched place           |
-| `Webscraped_PlacedMatched_Phone 5`     | Additional phone for matched place           |
-| `Webscraped_PlacedMatched_Fax`         | Fax for matched place                        |
-| `Webscraped_PlacedMatched_# of Parking Spots`           | Total parking spaces for matched place      |
-| `Webscraped_PlacedMatched_# of Reserved Parking Spots`  | Reserved spaces for matched place           |
-| `Webscraped_PlacedMatched_# of Paid Parking Spots`      | Paid-only spots for matched place           |
-| `Webscraped_PlacedMatched_# of Fuel Lanes`              | Fuel lanes for matched place                |
-| `Webscraped_PlacedMatched_# of Showers`                 | Showers for matched place                   |
-| `Webscraped_PlacedMatched_# of Men's Showers`           | Men's showers for matched place             |
-| `Webscraped_PlacedMatched_# of Truck Service Bays`      | Truck service bays for matched place        |
-| `Webscraped_PlacedMatched_Unleaded`    | Whether unleaded gasoline is available for matched place          |
+
+###### Location Details
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_PlacedMatched_Latitude`    | Website Visual Read Latitude for matched place             |
+| `Webscraped_PlacedMatched_Longitude`   | Website Visual Read observed Longitude for matched place            |
+| `Webscraped_PlacedMatched_LD_URL`      | Embedded website data URL for matched place      |
+| `Webscraped_PlacedMatched_LD_Latitude` | Embedded website data latitude for matched place |
+| `Webscraped_PlacedMatched_LD_Longitude`| Embedded website data longitude for matched place|
+| `Webscraped_PlacedMatched_Highway`     | Highway for matched place              |
+| `Webscraped_PlacedMatched_Exit`        | Exit number for matched place          |
+| `Webscraped_PlacedMatched_Mile Marker` | Mile marker for matched place          |
+| `Webscraped_PlacedMatched_Street Address` | Street address for matched place    |
+| `Webscraped_PlacedMatched_City`        | City for matched place                 |
+| `Webscraped_PlacedMatched_State`       | State associated with matched place   |
+| `Webscraped_PlacedMatched_Postal Code` | Postal code for matched place          |
+| `Webscraped_PlacedMatched_Road Name`   | Road name for matched place            |
+
+###### Contact Information
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_PlacedMatched_Phone`       | Main contact number for matched place  |
+| `Webscraped_PlacedMatched_Phone 2`     | Additional phone for matched place     |
+| `Webscraped_PlacedMatched_Phone 3`     | Additional phone for matched place     |
+| `Webscraped_PlacedMatched_Phone 4`     | Additional phone for matched place     |
+| `Webscraped_PlacedMatched_Phone 5`     | Additional phone for matched place     |
+| `Webscraped_PlacedMatched_Fax`         | Fax for matched place                  |
+
+###### Amenities & Services
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_PlacedMatched_# of Parking Spots`           | Total parking spaces for matched place             |
+| `Webscraped_PlacedMatched_# of Reserved Parking Spots`  | Reserved spaces for matched place                  |
+| `Webscraped_PlacedMatched_# of Paid Parking Spots`      | Paid-only spots for matched place                  |
+| `Webscraped_PlacedMatched_# of Fuel Lanes`              | Fuel lanes for matched place                       |
+| `Webscraped_PlacedMatched_# of Showers`                 | Showers for matched place                          |
+| `Webscraped_PlacedMatched_# of Men's Showers`           | Men's showers for matched place                    |
+| `Webscraped_PlacedMatched_# of Truck Service Bays`      | Truck service bays for matched place               |
+| `Webscraped_PlacedMatched_Hours of Operation`           | Hours for matched place                            |
+
+###### Fuel Types & Links
+
+| Column Name | Description |
+|:-------------------------------|:---------------------------------------------|
+| `Webscraped_PlacedMatched_Unleaded`    | Whether unleaded gasoline is available for matched place        |
 | `Webscraped_PlacedMatched_Diesel`      | Whether diesel fuel is available for matched place            |
 | `Webscraped_PlacedMatched_Bulk Def`    | Whether DEF (diesel exhaust fluid) is available for matched place |
 | `Webscraped_PlacedMatched_Propane`     | Whether propane is available for matched place                  |
