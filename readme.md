@@ -62,7 +62,12 @@ Furthermore, the dataset required extensive cleaning.
 
 ## Final Output 
 
-The final output is `Data\Processed_Final\10_final.csv`, which contains the following columns:
+The final outputs are:
+
+- `Data\Processed_Final\10_final.csv`: The main processed dataset containing all cleaned and geocoded truck stop records.
+- `Data\Processed_Final\10_supplementary.csv`: A supplementary file with additional supplementary fields.
+
+`10_final.csv` contains the following columns:
 
 ### Original Data Fields
 
