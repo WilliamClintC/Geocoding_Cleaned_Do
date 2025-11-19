@@ -53,7 +53,7 @@ def run_script(script_path, script_name):
         duration = end_time - start_time
         
         print(f"\n{'='*70}")
-        print(f"✅ {script_name} COMPLETED SUCCESSFULLY")
+        print(f"[SUCCESS] {script_name} COMPLETED SUCCESSFULLY")
         print(f"{'='*70}")
         print(f"Execution time: {duration:.2f} seconds")
         print(f"End time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -65,7 +65,7 @@ def run_script(script_path, script_name):
         duration = end_time - start_time
         
         print(f"\n{'='*70}")
-        print(f"❌ {script_name} FAILED")
+        print(f"[ERROR] {script_name} FAILED")
         print(f"{'='*70}")
         print(f"Error code: {e.returncode}")
         print(f"Execution time: {duration:.2f} seconds")
@@ -74,11 +74,11 @@ def run_script(script_path, script_name):
         return False
         
     except FileNotFoundError:
-        print(f"\n❌ ERROR: Script not found at {script_path}")
+        print(f"\n[ERROR] Script not found at {script_path}")
         return False
         
     except Exception as e:
-        print(f"\n❌ UNEXPECTED ERROR: {str(e)}")
+        print(f"\n[ERROR] UNEXPECTED EXCEPTION: {str(e)}")
         return False
 
 def check_prerequisites():
@@ -127,19 +127,19 @@ def check_prerequisites():
     
     # Report results
     if missing_dirs:
-        print("❌ Missing directories:")
+        print("[MISSING] Directories:")
         for dir_path in missing_dirs:
             print(f"   - {dir_path}")
     
     if missing_files:
-        print("❌ Missing files:")
+        print("[MISSING] Files:")
         for file_path in missing_files:
             print(f"   - {file_path}")
     
     if missing_dirs or missing_files:
         return False
     
-    print("✅ All prerequisites met!")
+    print("[READY] All prerequisites met!")
     return True
 
 def main():
@@ -148,7 +148,7 @@ def main():
     """
     pipeline_start_time = time.time()
     
-    print("🚀 GEOCODING DATA PROCESSING PIPELINE")
+    print("GEOCODING DATA PROCESSING PIPELINE")
     print("="*70)
     print("This master script will execute the complete data processing workflow:")
     print("  1. Data Cleaning (data_cleaning.py)")
@@ -158,7 +158,7 @@ def main():
     
     # Check prerequisites
     if not check_prerequisites():
-        print("\n❌ PIPELINE ABORTED: Prerequisites not met")
+        print("\n[ABORTED] PIPELINE: Prerequisites not met")
         print("Please ensure all required files and directories exist before running the pipeline.")
         sys.exit(1)
     
@@ -171,16 +171,16 @@ def main():
     overall_success = True
     
     # Execute data cleaning
-    print(f"\n🔄 Starting Phase 1: Data Cleaning...")
+    print(f"\n[PHASE] Starting Phase 1: Data Cleaning...")
     if not run_script(data_cleaning_script, "Data Cleaning Pipeline"):
-        print("\n❌ PIPELINE FAILED: Data cleaning step failed")
+        print("\n[FAILURE] PIPELINE: Data cleaning step failed")
         overall_success = False
     
     # Execute data finalization (only if data cleaning succeeded)
     if overall_success:
-        print(f"\n🔄 Starting Phase 2: Data Finalization...")
+        print(f"\n[PHASE] Starting Phase 2: Data Finalization...")
         if not run_script(data_finalization_script, "Data Finalization Pipeline"):
-            print("\n❌ PIPELINE FAILED: Data finalization step failed")
+            print("\n[FAILURE] PIPELINE: Data finalization step failed")
             overall_success = False
     
     # Calculate total pipeline time
@@ -190,26 +190,26 @@ def main():
     # Final status report
     print(f"\n{'='*70}")
     if overall_success:
-        print("🎉 COMPLETE PIPELINE EXECUTION SUCCESSFUL!")
-        print("='*70")
+        print("[SUCCESS] COMPLETE PIPELINE EXECUTION SUCCESSFUL!")
+        print("="*70)
         print("All phases completed successfully:")
-        print("  ✅ Phase 1: Data Cleaning (25 stages)")
-        print("  ✅ Phase 2: Data Finalization")
+        print("  [OK] Phase 1: Data Cleaning (25 stages)")
+        print("  [OK] Phase 2: Data Finalization")
         print(f"\nFinal outputs:")
-        print("  📁 Intermediate results: Data/Processed_Intermediate/")
-        print("  📄 Final dataset: Data/Processed_Final/10_final.csv")
+        print("  [DIR] Intermediate results: Data/Processed_Intermediate/")
+        print("  [FILE] Final dataset: Data/Processed_Final/10_final.csv")
         print(f"\nDataset ready for analysis with:")
         print("  • 2,336 geocoded locations")
         print("  • 29 essential columns")
         print("  • 98.7% coordinate completion rate")
         print("  • Comprehensive external data integration")
     else:
-        print("❌ PIPELINE EXECUTION FAILED!")
-        print("='*70")
+        print("[FAILURE] PIPELINE EXECUTION FAILED!")
+        print("="*70)
         print("One or more phases failed. Please check the error messages above.")
         print("Ensure all input files are available and try again.")
     
-    print("='*70")
+    print("="*70)
     print(f"Total pipeline execution time: {total_duration:.2f} seconds")
     print(f"Pipeline end time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     

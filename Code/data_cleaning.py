@@ -1954,7 +1954,7 @@ def process_add_4_workflow(df_main, df_truck_stops):
     
     print(f"Total rows in dataset: {len(df_main)}")
     
-    # 1️⃣ Phone number match analysis
+    # Step 1: Phone number match analysis
     print("Step 1: Phone number match analysis...")
     
     # Apply the safe_eval function to phone_scraped_matches_row_ids column
@@ -1976,7 +1976,7 @@ def process_add_4_workflow(df_main, df_truck_stops):
     print(f"Rows without phone matches: {rows_without_phone} ({percent_without_phone:.2f}%)")
     print(f"Total rows: {total_rows}")
     
-    # 2️⃣ Match success using address components
+    # Step 2: Match success using address components
     print("Step 2: Address component match analysis...")
     
     # Apply safe_eval to all match columns
@@ -2381,9 +2381,9 @@ def process_yelp_7_5_workflow(df_main):
     reordered_row_count = len(df_reordered)
     
     if original_row_count == reordered_row_count:
-        print(f"✓ Data integrity verified: Row count maintained ({original_row_count} rows)")
+        print(f"[CHECK] Data integrity verified: Row count maintained ({original_row_count} rows)")
     else:
-        print(f"⚠ WARNING: Row count changed from {original_row_count} to {reordered_row_count}")
+        print(f"[WARNING] Row count changed from {original_row_count} to {reordered_row_count}")
     
     return df_reordered
 
@@ -2511,7 +2511,7 @@ def process_yelp_8_workflow(df_main):
             if len(places_with_this_count) > 3:
                 print(f"    ... and {len(places_with_this_count) - 3} more places with {entry_count} entries")
     else:
-        print("\n✓ All place identifiers have exactly 6 entries!")
+        print("\nAll place identifiers have exactly 6 entries!")
     
     # Final verification
     print(f"\nFinal dataset shape: {df_main.shape}")
