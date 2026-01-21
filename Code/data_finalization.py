@@ -12,6 +12,15 @@ This is the final step in the data cleaning pipeline.
 import pandas as pd
 import os
 
+def get_project_path(*path_parts):
+    """
+    Get absolute path relative to the project root directory.
+    The script is in Code/ subdirectory, so we go up one level to get to project root.
+    """
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    return os.path.join(project_root, *path_parts)
+
 def process_notebooks_10_workflow(input_path, output_dir):
     """
     Process the Notebooks\10 workflow which performs final data filtering
@@ -304,8 +313,8 @@ def main():
     print("="*60)
     
     # Define paths
-    input_path = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Processed_Intermediate\9_complete.csv'
-    output_dir = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Processed_Final'
+    input_path = get_project_path('Data', 'Processed_Intermediate', '9_complete.csv')
+    output_dir = get_project_path('Data', 'Processed_Final')
     
     # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
