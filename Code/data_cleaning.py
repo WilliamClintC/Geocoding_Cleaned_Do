@@ -18,6 +18,15 @@ import os
 import random
 import ast
 
+def get_project_path(*path_parts):
+    """
+    Get absolute path relative to the project root directory.
+    The script is in Code/ subdirectory, so we go up one level to get to project root.
+    """
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    return os.path.join(project_root, *path_parts)
+
 def standardize_interstate_format_final(text):
     """
     Standardizes interstate highway naming to I-NUMBER format
@@ -760,7 +769,7 @@ def process_truck_stops_data():
     print("Processing TruckStopsServices data...")
     
     # Load the truck stops dataset
-    truck_stops_path = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Raw\TruckStopsServices.csv'
+    truck_stops_path = get_project_path('Data', 'Raw', 'TruckStopsServices.csv')
     df_truck_stops = pd.read_csv(truck_stops_path)
     
     print(f"TruckStopsServices data loaded with shape: {df_truck_stops.shape}")
@@ -804,7 +813,7 @@ def process_truck_stops_data():
         print(f"  {chain}: {count}")
     
     # Create output directory if it doesn't exist
-    output_dir = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Processed_Intermediate'
+    output_dir = get_project_path('Data', 'Processed_Intermediate')
     os.makedirs(output_dir, exist_ok=True)
     
     # Save the cleaned truck stops data
@@ -821,8 +830,8 @@ def process_add_1_workflow(df_main, df_truck_stops):
     """
     print("Processing Add_1 workflow...")
     
-    # Filter both dataframes to include only CA, UT, NV, and AZ states
-    states_to_keep = ['CA', 'UT', 'NV', 'AZ']
+    # Filter both dataframes to include only CA, UT, NV, AZ, OR, NM, WY, and ID states
+    states_to_keep = ['CA', 'UT', 'NV', 'AZ', 'OR', 'NM', 'WY', 'ID']
     
     print(f"Filtering main dataset for states: {states_to_keep}")
     original_main_count = len(df_main)
@@ -2166,7 +2175,7 @@ def process_yelp_4_workflow(df_main):
     print("Processing Yelp_Lookup 4 workflow - Phone number matching with Yelp data...")
     
     # Load the Yelp businesses dataset
-    yelp_path = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Raw\yelp_businesses_all.csv'
+    yelp_path = get_project_path('Data', 'Raw', 'yelp_businesses_all.csv')
     print(f"Loading Yelp businesses dataset from: {yelp_path}")
     
     try:
@@ -2836,7 +2845,7 @@ def process_yellowpages_1_workflow(df_main):
     print("Processing YellowPages_scraper 1 workflow - Phone number matching with YellowPages data...")
     
     # Load the YellowPages dataset
-    yellowpages_path = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Raw\yellowpages_data.csv'
+    yellowpages_path = get_project_path('Data', 'Raw', 'yellowpages_data.csv')
     print(f"Loading YellowPages dataset from: {yellowpages_path}")
     
     try:
@@ -3492,7 +3501,7 @@ def process_notebooks_1_workflow(df_main):
     print("Processing Notebooks 1 workflow - Comprehensive data enrichment...")
     
     # Load the webscraped dataset (scraped truck stops data)
-    webscraped_path = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Processed_Intermediate\scraped_4_7.csv'
+    webscraped_path = get_project_path('Data', 'Processed_Intermediate', 'scraped_4_7.csv')
     print(f"Loading webscraped dataset from: {webscraped_path}")
     
     try:
@@ -3503,7 +3512,7 @@ def process_notebooks_1_workflow(df_main):
         return df_main
     
     # Load the Yelp dataset
-    yelp_path = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Raw\yelp_businesses_all.csv'
+    yelp_path = get_project_path('Data', 'Raw', 'yelp_businesses_all.csv')
     print(f"Loading Yelp dataset from: {yelp_path}")
     
     try:
@@ -3514,7 +3523,7 @@ def process_notebooks_1_workflow(df_main):
         return df_main
     
     # Load the YellowPages dataset
-    yellowpages_path = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Raw\yellowpages_data.csv'
+    yellowpages_path = get_project_path('Data', 'Raw', 'yellowpages_data.csv')
     print(f"Loading YellowPages dataset from: {yellowpages_path}")
     
     try:
@@ -3691,7 +3700,8 @@ def main():
     
     # Load the original unbalanced panel dataset
     print("Loading the original unbalanced panel dataset...")
-    df = pd.read_csv(r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Raw\unbalanced_panel.csv')
+    data_path = get_project_path('Data', 'Raw', 'unbalanced_panel.csv')
+    df = pd.read_csv(data_path)
     print(f"Dataset loaded with shape: {df.shape}")
     
     # Standardize interstate highway formats
@@ -3729,7 +3739,7 @@ def main():
         print("None of the specified columns exist in the dataframe.")
     
     # Create output directory if it doesn't exist
-    output_dir = r'C:\Users\clint\Desktop\Geocoding_Cleaned_Documentation\Data\Processed_Intermediate'
+    output_dir = get_project_path('Data', 'Processed_Intermediate')
     os.makedirs(output_dir, exist_ok=True)
     
     # Save the initial cleaned data (equivalent to 1.csv)
